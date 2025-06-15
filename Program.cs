@@ -1,2 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using InvestigationGame.Managers;
+
+namespace InvestigationGame
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var manager = new InvestigationManager();
+            manager.StartInvestigation();
+        }
+    }
+}
