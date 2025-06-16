@@ -9,19 +9,20 @@ namespace InvestigationGame.Managers
     {
         private IranianAgent _agent;
         private List<Sensor> _availableSensors;
+        private int _turnCount;
 
         public InvestigationManager()
         {
-            // Step 1: Initialize available sensors
             _availableSensors = new List<Sensor>
             {
                 new AudioSensor(),
                 new PulseSensor()
             };
 
-            // Step 2: Initialize a basic agent with known weaknesses
-            var weaknesses = new List<string> { "Pulse", "Pulse" };
-            _agent = new FootSoldier(weaknesses);
+            // Example: use SquadLeader with 4 weaknesses
+            var weaknesses = new List<string> { "Pulse", "Pulse", "Audio", "Pulse" };
+            _agent = new SquadLeader(weaknesses);
+            _turnCount = 0;
         }
 
         public void StartInvestigation()
@@ -30,7 +31,10 @@ namespace InvestigationGame.Managers
 
             while (!_agent.IsExposed())
             {
-                Console.WriteLine("\nAvailable Sensors:");
+                _turnCount++;
+
+                Console.WriteLine($"\n--- Turn {_turnCount} ---");
+                Console.WriteLine("Available Sensors:");
                 for (int i = 0; i < _availableSensors.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {_availableSensors[i]}");
@@ -43,26 +47,27 @@ namespace InvestigationGame.Managers
                 {
                     Sensor selectedSensor = _availableSensors[choice - 1];
 
-                    // Prevent attaching broken sensors (e.g. PulseSensor)
                     if (selectedSensor is PulseSensor pulse && pulse.IsBroken())
                     {
-                        Console.WriteLine("⚠️ This PulseSensor is already broken. Choose a different one.");
+                        Console.WriteLine("This PulseSensor is already broken. Choose a different one.");
                         continue;
                     }
 
                     _agent.AttachSensor(selectedSensor);
                     Console.WriteLine($"Sensor attached: {selectedSensor.Name}");
-
-                    string status = _agent.GetStatus();
-                    Console.WriteLine($"Match status: {status}");
+                    Console.WriteLine($"Match status: {_agent.GetStatus()}");
                 }
                 else
                 {
                     Console.WriteLine("Invalid input. Try again.");
+                    continue;
                 }
+
+                // Run agent's turn logic (e.g., counterattack)
+                _agent.TakeTurn(_turnCount);
             }
 
-            Console.WriteLine("\n✅ Agent exposed!");
+            Console.WriteLine("\nAgent exposed!");
         }
     }
 }
