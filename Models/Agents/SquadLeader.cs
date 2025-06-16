@@ -16,7 +16,7 @@ namespace InvestigationGame.Models.Agents
                 int index = random.Next(_attachedSensors.Count);
                 var removed = _attachedSensors[index];
                 _attachedSensors.RemoveAt(index);
-                Console.WriteLine($"🛡 Counterattack! {removed.Name} sensor was removed.");
+                Console.WriteLine($"Counterattack! {removed.Name} sensor was removed.");
             }
         }
     }
