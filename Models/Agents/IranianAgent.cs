@@ -22,11 +22,17 @@ namespace InvestigationGame.Models.Agents
         public int CountCorrectSensors()
         {
             int correct = 0;
+            var remaining = new List<string>(_weaknesses); // Make a copy
+
             foreach (var sensor in _attachedSensors)
             {
-                if (_weaknesses.Contains(sensor.Name))
+                if (remaining.Contains(sensor.Name))
+                {
                     correct++;
+                    remaining.Remove(sensor.Name); // Prevent re-counting
+                }
             }
+
             return correct;
         }
 
