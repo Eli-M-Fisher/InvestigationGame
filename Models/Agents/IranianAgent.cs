@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using InvestigationGame.Models.Sensors;
 
-namespace InvestigationGame.Models
+namespace InvestigationGame.Models.Agents
 {
-    public class IranianAgent
+    public abstract class IranianAgent
     {
-        private readonly List<string> _weaknesses;
-        private readonly List<Sensor> _attachedSensors;
+        protected List<string> _weaknesses;
+        protected List<Sensor> _attachedSensors;
 
         public IranianAgent(List<string> weaknesses)
         {
@@ -13,32 +14,32 @@ namespace InvestigationGame.Models
             _attachedSensors = new List<Sensor>();
         }
 
-        public void AttachSensor(Sensor sensor)
+        public virtual void AttachSensor(Sensor sensor)
         {
             _attachedSensors.Add(sensor);
         }
 
         public int CountCorrectSensors()
         {
-            int correctCount = 0;
+            int correct = 0;
             foreach (var sensor in _attachedSensors)
             {
                 if (_weaknesses.Contains(sensor.Name))
-                {
-                    correctCount++;
-                }
+                    correct++;
             }
-            return correctCount;
+            return correct;
         }
 
-        public bool IsExposed()
+        public virtual string GetStatus()
+        {
+            return $"{CountCorrectSensors()}/{_weaknesses.Count}";
+        }
+
+        public virtual bool IsExposed()
         {
             return CountCorrectSensors() >= _weaknesses.Count;
         }
 
-        public string GetStatus()
-        {
-            return $"{CountCorrectSensors()}/{_weaknesses.Count}";
-        }
+        public virtual void TakeTurn(int turnCount) { } // virtual hook
     }
 }
