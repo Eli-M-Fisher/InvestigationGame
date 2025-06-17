@@ -15,11 +15,14 @@ namespace InvestigationGame.Managers
 
         public InvestigationManager()
         {
-            // Initialize available sensors
+            // Initialize available sensors (basic + advanced)
             _availableSensors = new List<Sensor>
             {
                 new AudioSensor(),
-                new PulseSensor()
+                new PulseSensor(),
+                new MagneticSensor(),
+                new SignalSensor(),
+                new LightSensor()
             };
 
             // Initialize agent progression
