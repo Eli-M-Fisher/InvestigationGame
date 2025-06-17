@@ -7,21 +7,30 @@ namespace InvestigationGame.Managers
 {
     public class InvestigationManager
     {
+        private List<IranianAgent> _agentSequence;
+        private int _currentAgentIndex;
         private IranianAgent _agent;
         private List<Sensor> _availableSensors;
         private int _turnCount;
 
         public InvestigationManager()
         {
+            // Initialize available sensors
             _availableSensors = new List<Sensor>
             {
                 new AudioSensor(),
                 new PulseSensor()
             };
 
-            // Example: use SquadLeader with 4 weaknesses
-            var weaknesses = new List<string> { "Pulse", "Pulse", "Audio", "Pulse" };
-            _agent = new SquadLeader(weaknesses);
+            // Initialize agent progression
+            _agentSequence = new List<IranianAgent>
+            {
+                new FootSoldier(new List<string> { "Audio", "Pulse" }),
+                new SquadLeader(new List<string> { "Pulse", "Pulse", "Audio", "Pulse" })
+            };
+
+            _currentAgentIndex = 0;
+            _agent = _agentSequence[_currentAgentIndex];
             _turnCount = 0;
         }
 
@@ -29,9 +38,17 @@ namespace InvestigationGame.Managers
         {
             Console.WriteLine("=== Iranian Agent Investigation ===");
 
-            while (!_agent.IsExposed())
+            while (true)
             {
                 _turnCount++;
+
+                // Show current level and target info at start of each agent
+                if (_turnCount == 1)
+                {
+                    Console.WriteLine($"\nNew Target: {_agent.GetType().Name}");
+                    Console.WriteLine($"Level {_currentAgentIndex + 1} of {_agentSequence.Count}");
+                    Console.WriteLine($"Goal: Reveal this agent by matching all secret sensors.");
+                }
 
                 Console.WriteLine($"\n--- Turn {_turnCount} ---");
                 Console.WriteLine("Available Sensors:");
@@ -63,11 +80,28 @@ namespace InvestigationGame.Managers
                     continue;
                 }
 
-                // Run agent's turn logic (e.g., counterattack)
+                // Let the agent act (e.g., counterattack)
                 _agent.TakeTurn(_turnCount);
-            }
 
-            Console.WriteLine("\nAgent exposed!");
+                // Check if agent was exposed
+                if (_agent.IsExposed())
+                {
+                    Console.WriteLine("\nAgent exposed!");
+                    _currentAgentIndex++;
+
+                    if (_currentAgentIndex < _agentSequence.Count)
+                    {
+                        Console.WriteLine("\nAdvancing to next agent...\n");
+                        _agent = _agentSequence[_currentAgentIndex];
+                        _turnCount = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nMission complete! All agents exposed.");
+                        break;
+                    }
+                }
+            }
         }
     }
 }
