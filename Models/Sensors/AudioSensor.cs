@@ -8,5 +8,10 @@ namespace InvestigationGame.Models.Sensors
         {
             return Name == weakness;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
