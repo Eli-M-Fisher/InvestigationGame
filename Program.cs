@@ -6,8 +6,7 @@ namespace InvestigationGame
     {
         static void Main(string[] args)
         {
-            var manager = new InvestigationManager();
-            manager.StartInvestigation();
+            GameMenu.Start();
         }
     }
 }
