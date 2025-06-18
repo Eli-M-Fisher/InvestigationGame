@@ -15,4 +15,4 @@ build/
 *.suo
 
 bin/
-obj/
+obj/obj/
