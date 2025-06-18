@@ -29,7 +29,10 @@ namespace InvestigationGame.Managers
             _agentSequence = new List<IranianAgent>
             {
                 new FootSoldier(new List<string> { "Audio", "Pulse" }),
-                new SquadLeader(new List<string> { "Pulse", "Pulse", "Audio", "Pulse" })
+                new SquadLeader(new List<string> { "Pulse", "Pulse", "Audio", "Pulse" }),
+                new SeniorCommander(new List<string> { "Pulse", "Audio", "Pulse", "Light", "Audio", "Magnetic" }),
+                new OrganizationLeader(new List<string> { "Pulse", "Audio", "Light", "Pulse", "Magnetic", "Audio", "Pulse", "Signal" })
+                
             };
 
             _currentAgentIndex = 0;
